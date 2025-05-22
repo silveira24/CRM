@@ -1,0 +1,88 @@
+# Arquivos de Log
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Arquivos de configuração de ambiente
+# NUNCA envie arquivos .env com credenciais reais!
+# Considere adicionar um .env.example ao seu repositório com variáveis de exemplo.
+.env
+.env.*
+!.env.example
+!.env.template
+
+# Dependências
+# Pastas de módulos instalados
+node_modules/
+jspm_packages/
+bower_components/
+
+# Arquivos de pacotes (geralmente não ignorados, mas listados para referência se necessário)
+# package-lock.json (geralmente é bom versionar)
+# yarn.lock (geralmente é bom versionar)
+# pnpm-lock.yaml (geralmente é bom versionar)
+
+# Diretórios de build e produção
+dist/
+build/
+out/
+public/ # Se for gerado por um processo de build (ex: Next.js, Vite)
+.next/
+.nuxt/
+.svelte-kit/
+.vercel/
+
+# Arquivos gerados por transpilers/compiladores (se não estiverem em dist/ ou build/)
+*.tsbuildinfo
+
+# Relatórios de Cobertura de Testes
+coverage/
+.nyc_output/
+
+# Arquivos de Cache
+.cache
+.npm
+.yarnrc # Se contiver tokens ou configurações específicas do usuário
+.pnp.*
+
+# Arquivos de Sistema Operacional
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Arquivos de configuração de IDEs e Editores
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Arquivos temporários diversos
+*.tmp
+*.temp
+*.swp
+*~
+
+# Arquivos de debug e dump
+*.pid
+*.seed
+*.pid.lock
+
+# Arquivos específicos de ferramentas (opcional, adicione se usar)
+# .eslintcache
+# .stylelintcache
+# .prettierignore (geralmente versionado, mas se for específico do ambiente)
+
+# Arquivos de ferramentas de deploy/infra (opcional)
+# .terraform/
+# .serverless/
+
+# Comentários específicos do seu projeto podem ser adicionados abaixo
