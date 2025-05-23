@@ -3,7 +3,9 @@ import { atualizarTarefa, buscarTarefas, criarTarefa } from "../services/tarefaS
 export const adicionarTarefa = async (req, res) => {
     try {
 
-        const {tarefa, 
+        const {
+            projeto = 'interno',
+            titulo,
             descricao = '', 
             criado_por = '', 
             prioridade = 'média', 
@@ -11,13 +13,13 @@ export const adicionarTarefa = async (req, res) => {
             responsavel = ''
         } = req.body;
 
-        if (!tarefa) {
+        if (!titulo) {
             return res.status(400).json({
                 error: 'Título da tarefa é obrigatório!',
             });
         }
 
-        const novaTarefa = await criarTarefa(tarefa, descricao, criado_por, prioridade, prazo, responsavel);
+        const novaTarefa = await criarTarefa(projeto, titulo, descricao, criado_por, prioridade, prazo, responsavel);
         res.status(201).json(novaTarefa);
 
     } catch (error) {
@@ -31,7 +33,7 @@ export const alterarTarefa = async (req, res) => {
 
         const { id } = req.params;
 
-        const { tarefa = '',
+        const { titulo = '',
             descricao = '',
             status = '',
             prioridade = '',
@@ -45,13 +47,13 @@ export const alterarTarefa = async (req, res) => {
             });
         }
 
-        if (!tarefa && !descricao && !prioridade && !prazo && !responsavel) {
+        if (!titulo && !descricao && !prioridade && !prazo && !responsavel) {
             return res.status(400).json({
                 error: 'Algum dos campos precisa ser alterado',
             });
         }
 
-        const tarefaAtualizada = await atualizarTarefa(id, tarefa, descricao, status, prioridade, prazo, responsavel);
+        const tarefaAtualizada = await atualizarTarefa(id, titulo, descricao, status, prioridade, prazo, responsavel);
         res.status(200).json(tarefaAtualizada);
 
     } catch (error) {

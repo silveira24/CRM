@@ -1,11 +1,11 @@
 import pool from "../config/db.js";
 
-export const criarTarefaDB = async (tarefa, descricao, criado_por, prioridade, prazo, responsavel) => {
+export const criarTarefaDB = async (projeto, titulo, descricao, criado_por, prioridade, prazo, responsavel) => {
     try {
 
         const { rows } = await pool.query(
-        'INSERT INTO tarefas (tarefa, descricao, criado_por, prioridade, prazo, responsavel) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-        [tarefa, descricao, criado_por, prioridade, prazo, responsavel]
+        'INSERT INTO tarefas (projeto, titulo, descricao, criado_por, prioridade, prazo, responsavel) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+        [projeto, titulo, descricao, criado_por, prioridade, prazo, responsavel]
     );
 
     return rows[0];
@@ -35,13 +35,13 @@ export const buscarTarefaPorId = async (id) => {
     }
 }
 
-export const atualizarTarefaDB = async (id, tarefa, descricao, status, prioridade, prazo, responsavel) => {
+export const atualizarTarefaDB = async (id, titulo, descricao, status, prioridade, prazo, responsavel) => {
     try {
 
         const { rows } = await pool.query(
             `
             UPDATE tarefas
-            SET tarefa = $1,
+            SET titulo = $1,
                 descricao = $2,
                 status = $3,
                 prioridade = $4,
@@ -50,7 +50,7 @@ export const atualizarTarefaDB = async (id, tarefa, descricao, status, prioridad
             WHERE id = $7
             RETURNING *;
         `,
-            [tarefa, descricao, status, prioridade,prazo, responsavel, id]
+            [titulo, descricao, status, prioridade,prazo, responsavel, id]
         );
 
         if (rows.length === 0) {

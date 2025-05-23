@@ -1,7 +1,7 @@
 import { atualizarTarefaDB, buscarTarefaPorId, buscarTarefasDB, criarTarefaDB} from '../models/tarefaModel.js';
 import { buscarUsuarioPorNome } from '../models/usuarioModel.js';
 
-export const criarTarefa = async (tarefa, descricao, criado_por, prioridade, prazo, responsavel) => {
+export const criarTarefa = async (projeto, titulo, descricao, criado_por, prioridade, prazo, responsavel) => {
     try {
         let responsavel_id = null;
 
@@ -14,13 +14,13 @@ export const criarTarefa = async (tarefa, descricao, criado_por, prioridade, pra
             }
         }
         
-        return await criarTarefaDB(tarefa, descricao, criado_por, prioridade, prazo, responsavel_id);
+        return await criarTarefaDB(projeto, titulo, descricao, criado_por, prioridade, prazo, responsavel_id);
     } catch (error) {
         throw new Error(`Erro ao criar tarefa: ${error.message}`)
     }
 }
 
-export const atualizarTarefa = async (id, tarefa, descricao, status, prioridade, prazo, responsavel) => {
+export const atualizarTarefa = async (id, titulo, descricao, status, prioridade, prazo, responsavel) => {
     const tarefaAntiga = await buscarTarefaPorId(id);
 
     if (responsavel?.trim()) {
@@ -36,7 +36,7 @@ export const atualizarTarefa = async (id, tarefa, descricao, status, prioridade,
             }
         }
 
-    return await atualizarTarefaDB(id, tarefa || tarefaAntiga.tarefa, descricao || tarefaAntiga.descricao, status || tarefaAntiga.status, prioridade || tarefaAntiga.prioridade, prazo || tarefaAntiga.prazo, responsavel || tarefaAntiga.responsavel);
+    return await atualizarTarefaDB(id, titulo || tarefaAntiga.titulo, descricao || tarefaAntiga.descricao, status || tarefaAntiga.status, prioridade || tarefaAntiga.prioridade, prazo || tarefaAntiga.prazo, responsavel || tarefaAntiga.responsavel);
 }
 
 export const buscarTarefas = async () => {
