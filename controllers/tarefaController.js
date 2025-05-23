@@ -1,4 +1,4 @@
-import { atualizarTarefa, criarTarefa } from "../services/tarefaService.js";
+import { atualizarTarefa, buscarTarefas, criarTarefa } from "../services/tarefaService.js";
 
 export const adicionarTarefa = async (req, res) => {
     try {
@@ -61,5 +61,14 @@ export const alterarTarefa = async (req, res) => {
 
         console.error('Erro ao alterar tarefa:', error.message);
         res.status(500).json({ error: 'Erro interno ao atualizar tarefa'});
+    }
+}
+
+export const buscarPorTarefas = async (req, res) => {
+    try {
+        const tarefas = await buscarTarefas();
+        res.status(200).json(tarefas);
+    } catch (error) {
+        res.status(500).json({ error: `Erro ao buscar tarefas: ${error.message}`});
     }
 }

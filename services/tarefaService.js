@@ -1,4 +1,4 @@
-import { atualizarTarefaDB, buscarTarefaPorId, criarTarefaDB} from '../models/tarefaModel.js';
+import { atualizarTarefaDB, buscarTarefaPorId, buscarTarefasDB, criarTarefaDB} from '../models/tarefaModel.js';
 import { buscarUsuarioPorNome } from '../models/usuarioModel.js';
 
 export const criarTarefa = async (tarefa, descricao, criado_por, prioridade, prazo, responsavel) => {
@@ -37,4 +37,8 @@ export const atualizarTarefa = async (id, tarefa, descricao, status, prioridade,
         }
 
     return await atualizarTarefaDB(id, tarefa || tarefaAntiga.tarefa, descricao || tarefaAntiga.descricao, status || tarefaAntiga.status, prioridade || tarefaAntiga.prioridade, prazo || tarefaAntiga.prazo, responsavel || tarefaAntiga.responsavel);
+}
+
+export const buscarTarefas = async () => {
+    return await buscarTarefasDB();
 }

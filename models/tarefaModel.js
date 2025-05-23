@@ -64,3 +64,18 @@ export const atualizarTarefaDB = async (id, tarefa, descricao, status, prioridad
         throw new Error('Erro ao atualizar tarefa');
     }
 }
+
+export const buscarTarefasDB = async () => {
+    try {
+
+        const { rows } = await pool.query(
+            'SELECT * FROM tarefas'
+        )
+
+        return rows;
+
+    } catch (error) {
+        console.error('❌ Erro ao buscar tarefas no banco de dados: ', error.message);
+        throw new Error('Erro ao buscar tarefas no banco e dados');
+    }
+}
