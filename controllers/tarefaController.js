@@ -1,4 +1,4 @@
-import { criarTarefa } from "../services/tarefaService.js";
+import { atualizarTarefa, criarTarefa } from "../services/tarefaService.js";
 
 export const adicionarTarefa = async (req, res) => {
     try {
@@ -23,5 +23,43 @@ export const adicionarTarefa = async (req, res) => {
     } catch (error) {
         console.error('❌ Erro ao criar tarefa:', error.message);
         res.status(500).json({ error: 'Erro interno ao criar tarefa' });
+    }
+}
+
+export const alterarTarefa = async (req, res) => {
+    try {
+
+        const { id } = req.params;
+
+        const { tarefa = '',
+            descricao = '',
+            status = '',
+            prioridade = '',
+            prazo = '',
+            responsavel = ''
+        } = req.body;
+
+        if (!id) {
+            return res.status(400).json({
+                error: 'ID é obrigatório.',
+            });
+        }
+
+        if (!tarefa && !descricao && !prioridade && !prazo && !responsavel) {
+            return res.status(400).json({
+                error: 'Algum dos campos precisa ser alterado',
+            });
+        }
+
+        const tarefaAtualizada = await atualizarTarefa(id, tarefa, descricao, status, prioridade, prazo, responsavel);
+        res.status(200).json(tarefaAtualizada);
+
+    } catch (error) {
+        if (error.message.includes('não encontrado')) {
+            return res.status(404).json({ error: error.message });
+        }
+
+        console.error('Erro ao alterar tarefa:', error.message);
+        res.status(500).json({ error: 'Erro interno ao atualizar tarefa'});
     }
 }
