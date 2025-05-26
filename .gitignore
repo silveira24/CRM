@@ -86,3 +86,4 @@ Desktop.ini
 # .serverless/
 
 # Comentários específicos do seu projeto podem ser adicionados abaixo
+/generated/prisma

@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model tarefas {
+  id          Int                @id @default(autoincrement())
+  projeto     String?            @db.VarChar(100)
+  titulo      String?            @db.VarChar(100)
+  descricao   String?            @db.VarChar(300)
+  criado_por  String?            @db.VarChar(50)
+  criado_em   DateTime?          @default(now()) @db.Timestamptz(6)
+  status      status_tarefa?     @default(n_o_iniciado)
+  prioridade  prioridade_tarefa? @default(m_dia)
+  prazo       DateTime?          @db.Date
+  responsavel Int?
+  comentarios String?            @db.VarChar(500)
+  usuarios    usuarios?          @relation(fields: [responsavel], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model usuarios {
+  id       Int       @id @default(autoincrement())
+  nome     String    @db.VarChar(50)
+  telefone String?   @db.VarChar(20)
+  email    String?   @db.VarChar(100)
+  tarefas  tarefas[]
+}
+
+enum prioridade_tarefa {
+  baixa
+  m_dia @map("média")
+  alta
+}
+
+enum status_tarefa {
+  n_o_iniciado @map("não iniciado")
+  aceito
+  em_andamento @map("em andamento")
+  finalizado
+  atrasado
+}
