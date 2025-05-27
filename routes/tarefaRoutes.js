@@ -3,8 +3,8 @@ import { adicionarTarefa, alterarTarefa, buscarPorTarefas } from '../controllers
 
 const router = express.Router();
 
-router.get('/tarefas', buscarPorTarefas);
-router.post('/tarefas', adicionarTarefa);
-router.put('/tarefas/:id', alterarTarefa);
+router.get('', buscarPorTarefas);
+router.post('', adicionarTarefa);
+router.put('/:id', alterarTarefa);
 
 export default router;

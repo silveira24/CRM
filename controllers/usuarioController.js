@@ -2,15 +2,15 @@ import { atualizarUsuario, buscarUsuarios, criarUsuario } from "../services/usua
 
 export const cadastrarUsuario = async (req, res) => {
     try {
-        const {nome, telefone, email} = req.body;
+        const {nome, telefone, email, senha} = req.body;
 
-        if (!nome || !telefone || !email) {
+        if (!nome || !telefone || !email || !senha) {
             return res.status(400).json({
-                error: 'Nome, telefone e email são obrigatórios.',
+                error: 'Nome, telefone, email e senha são obrigatórios.',
             });
         }
 
-        const usuario = await criarUsuario(nome, telefone,email);
+        const usuario = await criarUsuario(nome, telefone, email, senha);
         res.status(201).json(usuario);
     } catch (error) {
         console.error('❌ Erro ao criar usuário:', error.message);

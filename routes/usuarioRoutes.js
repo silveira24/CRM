@@ -3,8 +3,8 @@ import { alterarUsuario, buscarPorUsarios, cadastrarUsuario } from '../controlle
 
 const router = express.Router();
 
-router.post('/usuarios', cadastrarUsuario);
-router.put('/usuarios/:id', alterarUsuario);
-router.get('/usuarios', buscarPorUsarios);
+router.post('', cadastrarUsuario);
+router.put('/:id', alterarUsuario);
+router.get('', buscarPorUsarios);
 
 export default router;

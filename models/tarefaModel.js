@@ -1,14 +1,21 @@
-import pool from "../config/db.js";
+import { prisma } from "../prisma/client.js";
 
-export const criarTarefaDB = async (projeto, titulo, descricao, criado_por, prioridade, prazo, responsavel) => {
+export const criarTarefaDB = async (projeto, titulo, descricao, criado_por, prioridade, prazo, responsavelId) => {
     try {
 
-        const { rows } = await pool.query(
-        'INSERT INTO tarefas (projeto, titulo, descricao, criado_por, prioridade, prazo, responsavel) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-        [projeto, titulo, descricao, criado_por, prioridade, prazo, responsavel]
-    );
+        const novaTarefa = await prisma.tarefa.create({
+            data: {
+            projeto,
+            titulo,
+            descricao,
+            criado_por,
+            prioridade,
+            prazo,  
+            responsavelId: responsavelId ? parseInt(responsavelId, 10) : null,
+      },
+    });
 
-    return rows[0];
+    return novaTarefa;
 
     }  catch (error) {
         console.error("❌ Erro ao criar tarefa:", error.message);
@@ -18,64 +25,65 @@ export const criarTarefaDB = async (projeto, titulo, descricao, criado_por, prio
 
 export const buscarTarefaPorId = async (id) => {
     try {
-
-        const { rows } = await pool.query(
-            'SELECT * FROM tarefas WHERE id = $1', [id]
-        );
-
-        if (rows.length === 0) {
-            throw new Error(`Tarefa ${id} não encontrado`);
-        }
-
-        return rows[0];
-
-    } catch (error) {
-        console.error(`❌ Erro ao buscar tarefa por ID ${id}:`, error.message);
-        throw new Error('Erro ao buscar tarefa no banco de dados.');
+    const numericId = parseInt(id, 10);
+    if (isNaN(numericId)) {
+      throw new Error("ID da tarefa inválido.");
     }
-}
 
-export const atualizarTarefaDB = async (id, titulo, descricao, status, prioridade, prazo, responsavel) => {
-    try {
+    const tarefa = await prisma.tarefa.findUnique({
+      where: {
+        id: numericId,
+      },
+    });
 
-        const { rows } = await pool.query(
-            `
-            UPDATE tarefas
-            SET titulo = $1,
-                descricao = $2,
-                status = $3,
-                prioridade = $4,
-                prazo = $5,
-                responsavel = $6
-            WHERE id = $7
-            RETURNING *;
-        `,
-            [titulo, descricao, status, prioridade,prazo, responsavel, id]
-        );
-
-        if (rows.length === 0) {
-            throw new Error(`Tarefa ${id} não encontrado`);
-        }
-
-        return rows[0];
-
-    } catch (error ) {
-        console.error(`❌ Erro ao atualizar tarefa: `, error.message);
-        throw new Error('Erro ao atualizar tarefa');
+    if (!tarefa) {
+      throw new Error(`Tarefa ${id} não encontrada`);
     }
-}
+    return tarefa;
+  } catch (error) {
+    console.error(`❌ Erro ao buscar tarefa por ID ${id}:`, error.message);
+    if (error.message.includes(`Tarefa ${id} não encontrada`)) {
+        throw error;
+    }
+    throw new Error('Erro ao buscar tarefa no banco de dados.');
+  }
+};
+
+export const atualizarTarefaDB = async (id, titulo, descricao, status, prioridade, prazo, responsavelId) => {
+  try {
+    const numericId = parseInt(id, 10);
+    if (isNaN(numericId)) {
+      throw new Error("ID da tarefa inválido.");
+    }
+
+    const dataPayload = {};
+    if (titulo !== undefined) dataPayload.titulo = titulo;
+    if (descricao !== undefined) dataPayload.descricao = descricao;
+    if (status !== undefined) dataPayload.status = status;
+    if (prioridade !== undefined) dataPayload.prioridade = prioridade;
+    if (prazo !== undefined) dataPayload.prazo = prazo;
+    if (responsavelId !== undefined) dataPayload.responsavelId = responsavelId ? parseInt(responsavelId, 10) : null;
+
+    const tarefaAtualizada = await prisma.tarefa.update({
+      where: { id: numericId },
+      data: dataPayload,
+    });
+    return tarefaAtualizada;
+  } catch (error) {
+    if (error.code === 'P2025') {
+      throw new Error(`Tarefa com ID ${id} não encontrada para atualização.`);
+    }
+    console.error(`❌ Erro ao atualizar tarefa ${id}:`, error.message);
+    throw new Error('Erro ao atualizar tarefa no banco de dados.');
+  }
+};
 
 export const buscarTarefasDB = async () => {
-    try {
-
-        const { rows } = await pool.query(
-            'SELECT * FROM tarefas'
-        )
-
-        return rows;
-
-    } catch (error) {
-        console.error('❌ Erro ao buscar tarefas no banco de dados: ', error.message);
-        throw new Error('Erro ao buscar tarefas no banco e dados');
-    }
-}
+  try {
+    const tarefas = await prisma.tarefa.findMany();
+    return tarefas;
+  } catch (error) {
+    console.error('❌ Erro ao buscar tarefas no banco de dados: ', error.message);
+    throw new Error('Erro ao buscar tarefas no banco de dados');
+  }
+};

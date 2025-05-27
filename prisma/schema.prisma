@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -8,7 +8,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model tarefas {
+model Tarefa {
   id          Int                @id @default(autoincrement())
   projeto     String?            @db.VarChar(100)
   titulo      String?            @db.VarChar(100)
@@ -18,17 +18,30 @@ model tarefas {
   status      status_tarefa?     @default(n_o_iniciado)
   prioridade  prioridade_tarefa? @default(m_dia)
   prazo       DateTime?          @db.Date
-  responsavel Int?
+  responsavelId Int?
   comentarios String?            @db.VarChar(500)
-  usuarios    usuarios?          @relation(fields: [responsavel], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  usuario     Usuario?            @relation(fields: [responsavelId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("tarefas") 
 }
 
-model usuarios {
+model Usuario {
   id       Int       @id @default(autoincrement())
   nome     String    @db.VarChar(50)
   telefone String?   @db.VarChar(20)
-  email    String?   @db.VarChar(100)
-  tarefas  tarefas[]
+  email    String    @unique  @db.VarChar(100) 
+  senha    String    
+  tarefas  Tarefa[]
+
+  @@map("usuarios")
+}
+
+model Servico {
+  id              Int       @id @default(autoincrement())
+  ClientID        String    
+  ClientSecret    String  
+
+  @@map("servicos")
 }
 
 enum prioridade_tarefa {
