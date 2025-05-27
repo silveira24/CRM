@@ -1,4 +1,4 @@
-import { atualizarUsuario, criarUsuario } from "../services/usuarioService.js";
+import { atualizarUsuario, buscarUsuarios, criarUsuario } from "../services/usuarioService.js";
 
 export const cadastrarUsuario = async (req, res) => {
     try {
@@ -44,5 +44,15 @@ export const alterarUsuario = async (req, res) => {
 
         console.error('Erro ao alterar usuário:', error.message);
         res.status(500).json({ error: 'Erro interno ao atualizar usuário'});
+    }
+}
+
+export const buscarPorUsarios = async (req, res) => {
+    try {
+        const usuarios = await buscarUsuarios();
+        res.status(200).json(usuarios);
+    } catch (error) {
+        console.error('Erro ao buscar por usuários: ', error.message);
+        res.status(500).json({error: 'Erro interno ao buscar usuários'});
     }
 }

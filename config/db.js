@@ -13,7 +13,7 @@ const pool = new Pool({
 });
 
 pool.connect()
-  .then(() => console.log('✅ Conectado ao banco de dados no Render!'))
+  .then(() => console.log('✅ Conectado ao banco de dados no EC2!'))
   .catch((err) => console.error('❌ Erro ao conectar ao banco:', err.message));
 
 export default pool;

@@ -70,3 +70,17 @@ export const atualizarUsuarioDB = async (id, nome, telefone, email) => {
         throw new Error('Erro ao atualizar usuário');
      }
 }
+
+export const buscarUsuariosDB = async () => {
+    try {
+        const { rows } = await pool.query(
+            'SELECT * FROM usuarios'
+        )
+
+        return rows;
+
+    } catch (error) {
+        console.error('❌ Erro ao buscar usuários no banco de dados: ', error.message);
+        throw new Error('Erro ao buscar usuários no banco e dados');
+    }
+}
