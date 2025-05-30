@@ -8,8 +8,8 @@ export const adicionarTarefa = async (req, res) => {
             titulo,
             descricao = '', 
             criado_por = '', 
-            prioridade = 'média', 
-            prazo = new Date().toISOString().split('T')[0], 
+            prioridade = 'MEDIA', 
+            prazo: prazoInput, 
             responsavel = ''
         } = req.body;
 
@@ -18,8 +18,18 @@ export const adicionarTarefa = async (req, res) => {
                 error: 'Título da tarefa é obrigatório!',
             });
         }
+        let prazoFinal;
+        if (prazoInput) {
+            if (/^\d{4}-\d{2}-\d{2}$/.test(prazoInput)) {
+                prazoFinal = new Date(prazoInput + "T03:00:00.000Z");
+            } else {
+                return res.status(400).json({ error: 'Formato de data para o prazo é inválido. Use YYYY-MM-DD.' });
+            }
+        } else {
+            prazoFinal = new Date(new Date().setHours(0, 0, 0, 0));
+        }
 
-        const novaTarefa = await criarTarefa(projeto, titulo, descricao, criado_por, prioridade, prazo, responsavel);
+        const novaTarefa = await criarTarefa(projeto, titulo, descricao, criado_por, prioridade, prazoFinal, responsavel);
         res.status(201).json(novaTarefa);
 
     } catch (error) {
@@ -37,7 +47,7 @@ export const alterarTarefa = async (req, res) => {
             descricao = '',
             status = '',
             prioridade = '',
-            prazo = '',
+            prazo: prazoInput,
             responsavel = ''
         } = req.body;
 
@@ -53,7 +63,18 @@ export const alterarTarefa = async (req, res) => {
             });
         }
 
-        const tarefaAtualizada = await atualizarTarefa(id, titulo, descricao, status, prioridade, prazo, responsavel);
+        let prazoFinal;
+        if (prazoInput) {
+            if (/^\d{4}-\d{2}-\d{2}$/.test(prazoInput)) {
+                prazoFinal = new Date(prazoInput + "T03:00:00.000Z");
+            } else {
+                return res.status(400).json({ error: 'Formato de data para o prazo é inválido. Use YYYY-MM-DD.' });
+            }
+        } else {
+            prazoFinal = new Date(new Date().setHours(0, 0, 0, 0));
+        }
+
+        const tarefaAtualizada = await atualizarTarefa(id, titulo, descricao, status, prioridade, prazoFinal, responsavel);
         res.status(200).json(tarefaAtualizada);
 
     } catch (error) {

@@ -1,9 +1,8 @@
 import {atualizarUsuarioDB, buscarUsuarioPorId, buscarUsuariosDB, criarUsuarioDB} from '../models/usuarioModel.js';
 import bcrypt from 'bcryptjs';
 
-export const criarUsuario = async (nome, telefone, email, senhaPura) => {
-    const senha = bcrypt.hashSync(senhaPura, 10);
-    return await criarUsuarioDB(nome, telefone, email, senha);
+export const criarUsuario = async (nome, telefone, email) => {
+    return await criarUsuarioDB(nome, telefone, email);
 }
 
 export const atualizarUsuario = async (id, nome, telefone, email) => {

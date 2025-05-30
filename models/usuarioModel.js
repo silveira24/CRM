@@ -1,13 +1,12 @@
 import { prisma } from "../prisma/client.js";
 
-export const criarUsuarioDB = async (nome, telefone, email, senha) => {
+export const criarUsuarioDB = async (nome, telefone, email) => {
   try {
     const novoUsuario = await prisma.usuario.create({
       data: {
         nome,
         telefone,
-        email,
-        senha,
+        email,        
       },
     });
     return novoUsuario;
@@ -68,6 +67,12 @@ export const buscarUsuarioPorId = async (id) => {
     throw new Error(`Erro ao buscar usuário ${id}`);
   }
 };
+
+export const buscarUsuarioPorEmail = async (email) => {
+  return await prisma.usuario.findUnique({
+    where: {email}
+  })
+}
 
 export const atualizarUsuarioDB = async (id, nome, telefone, email) => {
   try {

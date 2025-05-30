@@ -4,13 +4,13 @@ export const cadastrarUsuario = async (req, res) => {
     try {
         const {nome, telefone, email, senha} = req.body;
 
-        if (!nome || !telefone || !email || !senha) {
+        if (!nome || !telefone || !email) {
             return res.status(400).json({
-                error: 'Nome, telefone, email e senha são obrigatórios.',
+                error: 'Nome, telefone e email são obrigatórios.',
             });
         }
 
-        const usuario = await criarUsuario(nome, telefone, email, senha);
+        const usuario = await criarUsuario(nome, telefone, email);
         res.status(201).json(usuario);
     } catch (error) {
         console.error('❌ Erro ao criar usuário:', error.message);
