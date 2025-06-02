@@ -1,7 +1,5 @@
 import  jwt  from "jsonwebtoken";
 
-import { verificarCredenciais } from "../services/authService";
-
 export const protegerRota = async (req, res, next) => {
 
   const authHeader = req.headers['authorization'];
